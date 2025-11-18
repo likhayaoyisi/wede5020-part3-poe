@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enquire about BrightFix Plumbing's services, products, sponsorship, or volunteering in Cape Town.">
+    <title>Enquiry - BrightFix Plumbing</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header>
+    <h1>BrightFix Plumbing Services</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="enquiry.html" class="active">Enquiry</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="content">
+    <h2>Service / Volunteer / Sponsorship Enquiry</h2>
+    <p>Use the form below to enquire about our services, products, or the possibility of volunteering or sponsoring. Once validated, you’ll get a response related to your request.</p>
+    
+    <form id="enquiryForm">
+        <label for="enquiryName">Name:</label>
+        <input type="text" id="enquiryName" name="enquiryName" required>
+        <div id="enquiryNameError" class="error-message"></div>
+
+        <label for="enquiryEmail">Email:</label>
+        <input type="email" id="enquiryEmail" name="enquiryEmail" required>
+        <div id="enquiryEmailError" class="error-message"></div>
+
+        <label for="enquiryType">I want to enquire about:</label>
+        <select id="enquiryType" name="enquiryType" required>
+            <option value="">-- Please choose --</option>
+            <option value="service">Service</option>
+            <option value="product">Product</option>
+            <option value="volunteer">Volunteering</option>
+            <option value="sponsor">Sponsorship</option>
+        </select>
+        <div id="enquiryTypeError" class="error-message"></div>
+
+        <label for="enquiryMessage">Enquiry Details:</label>
+        <textarea id="enquiryMessage" name="enquiryMessage" rows="5" required minlength="10"></textarea>
+        <div id="enquiryMessageError" class="error-message"></div>
+
+        <button type="submit">Submit Enquiry</button>
+    </form>
+    <div id="enquiryResponse"></div>
+</section>
+
+<footer>
+    <p>&copy; 2025 BrightFix Plumbing Services | Cape Town</p>
+</footer>
+<script>
+// Inline JS for page validation and dynamic response
+document.addEventListener('DOMContentLoaded', () => {
+    const enquiryForm = document.getElementById('enquiryForm');
+    const responseDiv = document.getElementById('enquiryResponse');
+    if (enquiryForm) {
+        enquiryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            let valid = true;
+
+            const name = document.getElementById('enquiryName').value.trim();
+            const email = document.getElementById('enquiryEmail').value.trim();
+            const type = document.getElementById('enquiryType').value;
+            const message = document.getElementById('enquiryMessage').value.trim();
+
+            if (name === '') {
+                showError('enquiryNameError', 'Name is required.');
+                valid = false;
+            }
+            if (email === '') {
+                showError('enquiryEmailError', 'Email is required.');
+                valid = false;
+            } else if (!validateEmail(email)) {
+                showError('enquiryEmailError', 'Please enter a valid email.');
+                valid = false;
+            }
+            if (type === '') {
+                showError('enquiryTypeError', 'Please select an enquiry type.');
+                valid = false;
+            }
+            if (message.length < 10) {
+                showError('enquiryMessageError', 'Details must be at least 10 characters.');
+                valid = false;
+            }
+            if (valid) {
+                responseDiv.textContent = 
+                  `Thank you for your ${type} enquiry, ${name}. We’ll respond about availability, costs, or next steps soon.`;
+                enquiryForm.reset();
+            }
+        });
+    }
+    function showError(el, msg) {document.getElementById(el).textContent = msg;}
+    function clearErrors() {document.querySelectorAll('.error-message').forEach(e=>e.textContent = '');}
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+});
+</script>
+</body>
+</html>
